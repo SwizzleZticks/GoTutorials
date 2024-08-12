@@ -3,28 +3,31 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 var userInput string
 
 func firstLoop() {
-	for true {
+loopyLoop:
+	for {
 		fmt.Println("Hello, World!")
 		fmt.Println("Would you like to continue? (y/n)")
 
-		fmt.Scanln(&userInput)
+		fmt.Scan(&userInput)
 
-		if userInput == "n" {
-			break
-		}
-		if userInput == "y" {
+		switch strings.ToLower(userInput) {
+		case "y":
 			continue
-		} else {
-			fmt.Println("Invalid input")
+		case "n":
+			break loopyLoop
+		default:
+			fmt.Println("That was a invalid, please type y or n")
 		}
 	}
 }
 func secondLoop() {
+loopyLoop:
 	for {
 		fmt.Print("Enter a number: ")
 		fmt.Scanln(&userInput)
@@ -41,40 +44,39 @@ func secondLoop() {
 		fmt.Println()
 
 		fmt.Println("Would you like to continue? (y/n)")
+		fmt.Scan(&userInput)
 
-		fmt.Scanln(&userInput)
-
-		if userInput == "n" {
-			break
-		}
-		if userInput == "y" {
+		switch strings.ToLower(userInput) {
+		case "y":
 			continue
-		} else {
-			fmt.Println("Invalid input")
+		case "n":
+			break loopyLoop
+		default:
+			fmt.Println("That was a invalid, please type y or n")
 		}
 	}
 }
 func doorLoop(code int, guessCount int) bool {
 	var result bool
 
-	for {
+guessLoop:
+	for guessCount > 0 {
 		fmt.Println("Enter door code guess: ")
 		fmt.Scanln(&userInput)
 		userGuess, _ := strconv.Atoi(userInput)
 
-		if userGuess == code && guessCount > 0 {
+		if userGuess == code {
+			result = false
 			fmt.Println("Your guess is right! Welcome to my house.")
-			result = true
-			break
-		}
-		if userGuess != code && guessCount > 0 {
+			break guessLoop
+		} else if userGuess != code {
 			fmt.Println("That password was incorrect please try again.")
 			guessCount--
 		}
 		if guessCount == 0 {
+			result = true
 			fmt.Print("Too many incorrect attempts!")
-			result = false
-			break
+			break guessLoop
 		}
 	}
 	return result
